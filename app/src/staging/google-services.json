@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1084035589831",
+    "firebase_url": "https://medvidi-staging.firebaseio.com",
+    "project_id": "medvidi-staging",
+    "storage_bucket": "medvidi-staging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084035589831:android:8634758694927634b800e2",
+        "android_client_info": {
+          "package_name": "com.medvidi.android.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084035589831-sufvg2dgfln268s107bavo4c0o9aaft8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medvidi.android.staging",
+            "certificate_hash": "0d30648adac48568e7d8237a74cbe370346dc3dc"
+          }
+        },
+        {
+          "client_id": "1084035589831-gl8r006249goaq6n68vm8r07g4h4mr0s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzXtpAYtJH3n6vCI3OaWegM9QQtacVPPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084035589831-gl8r006249goaq6n68vm8r07g4h4mr0s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

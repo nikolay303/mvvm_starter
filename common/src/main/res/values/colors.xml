@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white_transparent_0">#00FFFFFF</color>
+    <color name="white_transparent_10">#1AFFFFFF</color>
+    <color name="white_transparent_13">#22FFFFFF</color>
+    <color name="white_transparent_20">#33FFFFFF</color>
+    <color name="white_transparent_30">#4CFFFFFF</color>
+    <color name="white_transparent_40">#66FFFFFF</color>
+    <color name="white_transparent_50">#80FFFFFF</color>
+    <color name="white_transparent_54">#8AFFFFFF</color>
+    <color name="white_transparent_60">#99FFFFFF</color>
+    <color name="white_transparent_64">#A3FFFFFF</color>
+    <color name="white_transparent_70">#B3FFFFFF</color>
+    <color name="white_transparent_80">#CCFFFFFF</color>
+    <color name="white_transparent_87">#DEFFFFFF</color>
+    <color name="white_transparent_90">#E6FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="black">#000000</color>
+    <color name="black_transparent_0">#00000000</color>
+    <color name="black_transparent_01">#03000000</color>
+    <color name="black_transparent_02">#05000000</color>
+    <color name="black_transparent_08">#15000000</color>
+    <color name="black_transparent_10">#1A000000</color>
+    <color name="black_transparent_13">#22000000</color>
+    <color name="black_transparent_20">#33000000</color>
+    <color name="black_transparent_30">#4C000000</color>
+    <color name="black_transparent_40">#66000000</color>
+    <color name="black_transparent_50">#80000000</color>
+    <color name="black_transparent_54">#8A000000</color>
+    <color name="black_transparent_60">#9A000000</color>
+    <color name="black_transparent_63">#A1000000</color>
+    <color name="black_transparent_70">#B3000000</color>
+    <color name="black_transparent_80">#CC000000</color>
+    <color name="black_transparent_87">#DE000000</color>
+</resources>

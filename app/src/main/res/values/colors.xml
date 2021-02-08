@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryDark">#1D1D1D</color>
+    <color name="colorPrimary">#1D1D1D</color>
+    <color name="colorAccent">#E7424E</color>
+    <color name="red">#E7424E</color>
+    <color name="red_20">#33E7424E</color>
+    <color name="color_ripple_button_stroke">#4DE7424E</color>
+    <color name="color_ripple_button">#4DFFFFFF</color>
+    <color name="color_ripple_item_list">#33000000</color>
+
+</resources>

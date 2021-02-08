@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">App Name</string>
+
+    <string name="message_server_error">Server error</string>
+    <string name="message_bad_gateway">Bad Gateway</string>
+    <string name="message_unauthorized">Unauthorized</string>
+    <string name="message_page_not_found">Page not found</string>
+    <string name="message_network_error">Network error</string>
+
+</resources>

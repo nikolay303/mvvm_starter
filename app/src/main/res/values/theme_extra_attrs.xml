@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="accentPrimary" format="reference" />
+    <attr name="accentPrimary_80" format="reference" />
+    <attr name="accentPrimary_60" format="reference" />
+    <attr name="accentPrimary_50" format="reference" />
+    <attr name="accentPrimary_40" format="reference" />
+    <attr name="accentPrimary_30" format="reference" />
+    <attr name="accentPrimary_20" format="reference" />
+
+    <attr name="accentSecondary" format="reference" />
+    <attr name="accentSecondary_80" format="reference" />
+    <attr name="accentSecondary_60" format="reference" />
+    <attr name="accentSecondary_50" format="reference" />
+    <attr name="accentSecondary_40" format="reference" />
+    <attr name="accentSecondary_20" format="reference" />
+
+    <attr name="white" format="reference" />
+    <attr name="white_90" format="reference" />
+    <attr name="white_80" format="reference" />
+    <attr name="white_70" format="reference" />
+    <attr name="white_60" format="reference" />
+    <attr name="white_50" format="reference" />
+    <attr name="white_40" format="reference" />
+    <attr name="white_30" format="reference" />
+    <attr name="white_20" format="reference" />
+
+    <attr name="grey" format="reference" />
+    <attr name="grey_80" format="reference" />
+    <attr name="grey_60" format="reference" />
+    <attr name="grey_40" format="reference" />
+    <attr name="grey_20" format="reference" />
+</resources>
