@@ -6,4 +6,4 @@ Used libraries:
  - Coroutines;
  - Timber;
  - Room;
- - Coil for loading images;
+ - Coil for loading images.
