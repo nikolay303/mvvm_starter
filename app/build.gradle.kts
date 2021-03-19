@@ -121,8 +121,7 @@ dependencies {
     implementation(Deps.Database.roomCompiler)
     implementation(Deps.Database.roomKtx)
 
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    kapt("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("io.coil-kt:coil:1.1.1")
 
     implementation(project(":common"))
     implementation(project(":core"))
