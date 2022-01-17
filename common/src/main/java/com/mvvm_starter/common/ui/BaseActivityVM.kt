@@ -1,9 +1,12 @@
 package com.mvvm_starter.common.ui
 
 import android.os.Bundle
-import org.jetbrains.anko.toast
+import androidx.annotation.LayoutRes
+import androidx.viewbinding.ViewBinding
+import com.mvvm_starter.core.utils.toast
 
-abstract class BaseActivityVM<VM : BaseViewModel> : BaseActivity() {
+abstract class BaseActivityVM<T : ViewBinding, VM : BaseViewModel>(@LayoutRes layoutResId: Int) :
+    BaseActivity<T>(layoutResId) {
 
     protected abstract val viewModel: VM//by activityViewModels<VM>()
 

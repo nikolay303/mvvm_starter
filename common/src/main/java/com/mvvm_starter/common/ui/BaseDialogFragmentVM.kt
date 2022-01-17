@@ -2,7 +2,7 @@ package com.mvvm_starter.common.ui
 
 import android.os.Bundle
 import android.view.View
-import org.jetbrains.anko.toast
+import com.mvvm_starter.core.utils.toast
 
 
 abstract class BaseDialogFragmentVM<VM : BaseViewModel> : BaseDialogFragment() {

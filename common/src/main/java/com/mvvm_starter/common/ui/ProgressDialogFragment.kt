@@ -8,9 +8,6 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.mvvm_starter.common.R
 
-/**
- * Created by nikolay on 17/03/2019
- */
 
 class ProgressDialogFragment : BaseDialogFragment() {
 

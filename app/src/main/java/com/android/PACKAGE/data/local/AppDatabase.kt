@@ -8,10 +8,6 @@ import com.android.PACKAGE.BuildConfig
 import com.android.PACKAGE.R
 
 
-/**
- * Created by Nikolay Siliuk on 2/1/21.
- */
-
 //@Database(
 //    entities = [],
 //    version = 1

@@ -11,10 +11,6 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
-/**
- * Created by Nikolay Siliuk on 1/31/21.
- */
-
 @Module
 @InstallIn(SingletonComponent::class)
 object StorageModule {

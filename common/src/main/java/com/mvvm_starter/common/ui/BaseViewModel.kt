@@ -5,10 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 
-/**
- * Created by Nikolay Siliuk on 1/25/21.
- */
-
 abstract class BaseViewModel : ViewModel() {
 
     private val _httpError = MutableLiveData<String>()

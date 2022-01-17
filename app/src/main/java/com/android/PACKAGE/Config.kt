@@ -1,10 +1,6 @@
 package com.android.PACKAGE
 
 
-/**
- * Created by Nikolay Siliuk on 1/31/21.
- */
-
 object Config {
 
     private const val TEST_API_URL = ""

@@ -1,27 +1,19 @@
 package com.mvvm_starter.common.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import timber.log.Timber
 
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment<T : ViewBinding>(@LayoutRes layoutResId: Int) : Fragment(layoutResId) {
 
-    abstract val layoutResId: Int
+    protected abstract val binding: T
     abstract fun setupView(savedInstanceState: Bundle?)
 
     private var progressDialog: ProgressDialogFragment? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(layoutResId, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +28,7 @@ abstract class BaseFragment : Fragment() {
         try {
             if (progressDialog == null || progressDialog?.isVisible == false) {
                 progressDialog = ProgressDialogFragment()
-                progressDialog?.show(requireFragmentManager(), null)
+                progressDialog?.show(parentFragmentManager, null)
             }
         } catch (e: Exception) {
             Timber.e(e)

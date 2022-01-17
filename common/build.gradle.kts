@@ -1,22 +1,23 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
 }
 
 android {
-    compileSdkVersion(Versions.compileSdk)
-    buildToolsVersion(Versions.buildTools)
+    compileSdk = Versions.compileSdk
+    buildToolsVersion = Versions.buildTools
 
     defaultConfig {
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.compileSdk)
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = Versions.minSdk
+        targetSdk = Versions.compileSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -35,11 +36,12 @@ dependencies {
     implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libs")))
 
     implementation(Deps.Common.appCompat)
-    implementation(Deps.Common.ankoCommons)
     implementation(Deps.Common.timber)
     implementation(Deps.Common.material)
     implementation(Deps.Common.kotlinStdLib)
     implementation(Deps.Common.lifecycleViewModelKtx)
+    api(Deps.Common.viewBinding)
+    api(Deps.Common.viewBindingNoReflection)
 
-    implementation(project(":core"))
+    api(project(":core"))
 }

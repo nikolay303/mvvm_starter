@@ -1,8 +1,5 @@
 package com.mvvm_starter.core.utils
 
-/**
- * Created by nikolay on 2019-12-24
- */
 
 fun <T> Iterable<T>.copy(): Iterable<T> {
     val mutableList = mutableListOf<T>()

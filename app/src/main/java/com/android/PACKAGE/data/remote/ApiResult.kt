@@ -9,11 +9,6 @@ import retrofit2.HttpException
 import timber.log.Timber
 
 
-/**
- * Created by Nikolay Siliuk on 1/31/21.
- */
-
-
 typealias Complete = () -> Unit
 typealias Success<T> = (T) -> Unit
 typealias Error = (HttpError) -> Unit

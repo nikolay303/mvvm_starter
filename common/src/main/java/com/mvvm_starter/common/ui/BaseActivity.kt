@@ -2,15 +2,16 @@ package com.mvvm_starter.common.ui
 
 import android.graphics.Rect
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
 import com.mvvm_starter.core.utils.clearFocusFromFocusedEditText
 import com.mvvm_starter.core.utils.listenTouchesToHideKeyboard
-import org.jetbrains.anko.contentView
 
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<T : ViewBinding>(@LayoutRes layoutResId: Int)  : AppCompatActivity(layoutResId) {
 
-    protected abstract val layoutResId: Int
+    protected abstract val binding: T
 
     private var progressDialog: ProgressDialogFragment? = null
 
@@ -18,19 +19,15 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutResId)
+        setContentView(binding.root)
         if (hideKeyboardByClickOutside()) {
             listenTouchesToHideKeyboard(this)
-            onStateKeyboardListener(onHide = { contentView?.let(::clearFocusFromFocusedEditText) })
+            onStateKeyboardListener(onHide = { clearFocusFromFocusedEditText(binding.root) })
         }
         setupView(savedInstanceState)
     }
 
     protected open fun hideKeyboardByClickOutside(): Boolean {
-        return true
-    }
-
-    protected open fun shouldCheckUserVerification(): Boolean {
         return true
     }
 
@@ -59,7 +56,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected fun onStateKeyboardListener(onShow: () -> Unit = {}, onHide: () -> Unit = {}) {
-        val root = contentView ?: return
+        val root = binding.root
         var isKeyboardShown = false
         root.viewTreeObserver.addOnGlobalLayoutListener {
             val r = Rect()
@@ -74,7 +71,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 onShow.invoke()
                 true
             } else {
-                contentView?.let(::clearFocusFromFocusedEditText)
+                clearFocusFromFocusedEditText(binding.root)
                 onHide.invoke()
                 false
             }

@@ -5,8 +5,12 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.text.format.DateFormat
+import android.util.Range
 import com.mvvm_starter.core.R
 import java.text.SimpleDateFormat
+import java.time.*
+import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
 import java.util.*
 
 
@@ -14,343 +18,152 @@ const val MILLIS_IN_HOUR = 1000 * 60 * 60L
 const val MILLIS_IN_DAY = MILLIS_IN_HOUR * 24L
 const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
 const val SIMPLE_DATE_FORMAT = "dd.MM.yyyy"
+const val RUSSIAN_DATE_FORMAT = "d MMMM, EE"
 const val TIME_FORMAT = "HH:mm"
 const val SHORT_DATE_FORMAT = "dd MMM"
 const val DISPLAY_DATE_FORMAT = "EEEE, d MMMM"
 const val DISPLAY_TADAY_DATE_FORMAT = ", d MMMM"
 const val DISPLAY_TADAY_SHORT_DATE_FORMAT = "d MMM"
-const val NOW_CAPS = "Сегодня"
-const val NOW = "cегодня"
+const val DATE_TIME_FORMAT_ISO_8601_WITH_MILLIS = "yyyy-MM-dd'T'HH:mm:ss[.SSS]X"
+const val DATE_TIME_FORMAT_ISO_8601_WITH_X = "yyyy-MM-dd'T'HH:mm:ssX"
+const val DATE_TIME_FORMAT_ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss"
 
 
-/**
- * Date extensions
- */
-
-@SuppressLint("SimpleDateFormat")
-fun Date.weekDayOneChar(): String =
-    SimpleDateFormat("E").format(this).first().toUpperCase().toString()
-
-fun Date.copy() = this.clone() as Date
-
-@SuppressLint("SimpleDateFormat")
-fun Date.inMonthYearFormat(): String = SimpleDateFormat("LLLL, yyyy").format(this)
-
-@SuppressLint("SimpleDateFormat")
-fun Date.inFormat(pattern: String): String = SimpleDateFormat(pattern).format(this)
-
-@SuppressLint("SimpleDateFormat")
-fun Date.inSimpleFormat(): String = SimpleDateFormat(SIMPLE_DATE_FORMAT).format(this)
-
-fun Date.inDateFormat(context: Context): String = DateFormat.getMediumDateFormat(context).format(this)
-
-fun Date.inServerDateFormat(): String = SimpleDateFormat(SERVER_DATE_FORMAT).format(this)
-
-
-@SuppressLint("SimpleDateFormat")
-fun Date.inShortDateFormat(format: String = SHORT_DATE_FORMAT): String = SimpleDateFormat(format).format(this)
-
-@SuppressLint("SimpleDateFormat")
-fun Date.inTimeFormat(format: String = TIME_FORMAT): String = SimpleDateFormat(format).format(this)
-
-fun Date.toDateTime(pattern: String, locale: Locale = Locale.getDefault()): String =
-    SimpleDateFormat(pattern, locale).format(this)
-
-@SuppressLint("SimpleDateFormat")
-fun Date.toServerDateFormat(): String = SimpleDateFormat(SERVER_DATE_FORMAT).format(this)
-
-
-fun Date.toCalendar(): Calendar =
-    Calendar.getInstance().apply { time = this@toCalendar }
-
-fun Date?.toDateOfBirthFormat(): String {
-    return this?.toDateTime("LLLL d, yyyy")?.capitalize().orEmpty()
+fun LocalTime.format(pattern: String): String {
+    return this.format(DateTimeFormatter.ofPattern(pattern))
 }
-
-fun Date.isSameTime(d: Date?) =
-    this.hours == d?.hours
-            && this.minutes == d.minutes
-            && this.seconds == d.seconds
-
-
-/**
- * Calendar extensions
- */
-
-fun Calendar.copy() = this.clone() as Calendar
-
-fun Calendar.openDatePicker(
-    context: Context,
-    callback: (year: Int, month: Int, dayOfMonth: Int) -> Unit,
-) {
-    DatePickerDialog(
-        context, { _, year, month, dayOfMonth ->
-            callback.invoke(year, month, dayOfMonth)
-        },
-        get(Calendar.YEAR),
-        get(Calendar.MONTH),
-        get(Calendar.DAY_OF_MONTH)
-    ).show()
+fun LocalDate.format(pattern: String): String {
+    return this.format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.getDefault()))
 }
-
-fun Calendar.openTimePicker(context: Context, callback: (hourOfDay: Int, minute: Int) -> Unit) {
-    TimePickerDialog(
-        context, { _, hourOfDay, minute ->
-            callback.invoke(hourOfDay, minute)
-        },
-        get(Calendar.HOUR_OF_DAY),
-        get(Calendar.MINUTE), DateFormat.is24HourFormat(context)
-    ).show()
+fun LocalDateTime.format(pattern: String): String {
+    return this.format(DateTimeFormatter.ofPattern(pattern))
 }
-
-fun Calendar.toEndDay() {
-    set(Calendar.HOUR_OF_DAY, 23)
-    set(Calendar.MINUTE, 59)
-    set(Calendar.SECOND, 59)
-    set(Calendar.MILLISECOND, 999)
+fun OffsetDateTime.format(pattern: String): String {
+    return this.format(DateTimeFormatter.ofPattern(pattern))
 }
-
-fun Calendar.isInFuture(): Boolean {
-    val todayEnd = Calendar.getInstance().apply { toEndDay() }
-    return this.timeInMillis > todayEnd.timeInMillis
+fun YearMonth.format(pattern: String): String {
+    return this.format(DateTimeFormatter.ofPattern(pattern))
 }
-
-fun Calendar.startDay() = copy().apply {
-    set(Calendar.HOUR_OF_DAY, 0)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 0)
+fun LocalDate.isWeekendDay(): Boolean {
+    return dayOfWeek in weekendDaysByLocale()
 }
-
-fun Calendar.finishDay() = copy().apply {
-    set(Calendar.HOUR_OF_DAY, 23)
-    set(Calendar.MINUTE, 59)
-    set(Calendar.SECOND, 59)
-}
-
-fun Calendar.finishDayMillis(): Long =
-    finishDay().timeInMillis
-
-fun Calendar.startDayMillis(): Long =
-    startDay().timeInMillis
-
-fun Calendar.toServerDateFormat(): String = time.toServerDateFormat()
-
-fun Calendar.isToday() = isSameDay(Calendar.getInstance())
-
-fun Calendar.isTomorrow() = isSameDay(tomorrow())
-
-fun Calendar.isSameDay(c: Calendar) =
-    this.get(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)
-            && this.get(Calendar.MONTH) == c.get(Calendar.MONTH)
-            && this.get(Calendar.YEAR) == c.get(Calendar.YEAR)
-
-fun Calendar.isSameTime(c: Calendar, compareSeconds: Boolean = true) =
-    this.get(Calendar.HOUR_OF_DAY) == c.get(Calendar.HOUR_OF_DAY)
-            && this.get(Calendar.MINUTE) == c.get(Calendar.MINUTE)
-            && ((compareSeconds && this.get(Calendar.SECOND) == c.get(Calendar.SECOND))
-            || !compareSeconds)
-
-fun Calendar.isSameDateTime(c: Calendar, compareSeconds: Boolean = true) =
-    isSameDay(c) && isSameTime(c, compareSeconds)
-
-fun Calendar.afterDate(c: Calendar): Boolean {
-    if (this.get(Calendar.YEAR) > c.get(Calendar.YEAR)) {
-        return true
-    }
-
-    if (this.get(Calendar.YEAR) == c.get(Calendar.YEAR)
-        && this.get(Calendar.MONTH) > c.get(Calendar.MONTH)
-    ) {
-        return true
-    }
-
-    return this.get(Calendar.YEAR) == c.get(Calendar.YEAR)
-            && this.get(Calendar.MONTH) == c.get(Calendar.MONTH)
-            && this.get(Calendar.DAY_OF_MONTH) > c.get(Calendar.DAY_OF_MONTH)
-}
-
-fun Calendar.beforeDate(c: Calendar): Boolean {
-    if (this.get(Calendar.YEAR) < c.get(Calendar.YEAR)) {
-        return true
-    }
-
-    if (this.get(Calendar.YEAR) == c.get(Calendar.YEAR)
-        && this.get(Calendar.MONTH) < c.get(Calendar.MONTH)
-    ) {
-        return true
-    }
-
-    return this.get(Calendar.YEAR) == c.get(Calendar.YEAR)
-            && this.get(Calendar.MONTH) == c.get(Calendar.MONTH)
-            && this.get(Calendar.DAY_OF_MONTH) < c.get(Calendar.DAY_OF_MONTH)
-}
-
-fun Calendar.afterTime(c: Calendar, compareSeconds: Boolean = true): Boolean {
-    if (this.get(Calendar.HOUR_OF_DAY) > c.get(Calendar.HOUR_OF_DAY)) {
-        return true
-    }
-
-    if (this.get(Calendar.HOUR_OF_DAY) == c.get(Calendar.HOUR_OF_DAY)
-        && this.get(Calendar.MINUTE) > c.get(Calendar.MINUTE)
-    ) {
-        return true
-    }
-
-    return this.get(Calendar.HOUR_OF_DAY) == c.get(Calendar.HOUR_OF_DAY)
-            && this.get(Calendar.MINUTE) == c.get(Calendar.MINUTE)
-            && (!compareSeconds || (compareSeconds && this.get(Calendar.SECOND) > c.get(Calendar.SECOND)))
-}
-
-fun Calendar.beforeTime(c: Calendar, compareSeconds: Boolean = true): Boolean {
-    if (this.get(Calendar.HOUR_OF_DAY) < c.get(Calendar.HOUR_OF_DAY)) {
-        return true
-    }
-
-    if (this.get(Calendar.HOUR_OF_DAY) == c.get(Calendar.HOUR_OF_DAY)
-        && this.get(Calendar.MINUTE) < c.get(Calendar.MINUTE)
-    ) {
-        return true
-    }
-
-    return this.get(Calendar.HOUR_OF_DAY) == c.get(Calendar.HOUR_OF_DAY)
-            && this.get(Calendar.MINUTE) == c.get(Calendar.MINUTE)
-            && (!compareSeconds || (compareSeconds && this.get(Calendar.SECOND) < c.get(Calendar.SECOND)))
-}
-
-fun Calendar.afterDateTime(c: Calendar, compareSeconds: Boolean = true): Boolean {
-    if (afterDate(c) && !isSameDay(c)) {
-        return true
-    }
-
-    return isSameDay(c) && afterTime(c, compareSeconds)
-}
-
-fun Calendar.beforeDateTime(c: Calendar, compareSeconds: Boolean = true): Boolean {
-    if (beforeDate(c) && !isSameDay(c)) {
-        return true
-    }
-
-    return isSameDay(c) && beforeTime(c, compareSeconds)
-}
-
-/**
- * Other functions
- */
-
-fun calendar(): Calendar = Calendar.getInstance()
-
-fun calendar(timeInMillis: Long) =
-    calendar().apply { this.timeInMillis = timeInMillis }
-
-@SuppressLint("SimpleDateFormat")
-fun parseServerDateFormat(date: String): Date? {
-    return try {
-        SimpleDateFormat(SERVER_DATE_FORMAT)
-            .apply { timeZone = TimeZone.getTimeZone("GMT") }
-            .parse(date)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return null
+fun weekendDaysByLocale(locale: Locale = Locale.getDefault()): Array<DayOfWeek> {
+    val weekendSatSun = arrayOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
+    val weekendFriSat = arrayOf(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY)
+    val weekendThuFri = arrayOf(DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
+    val weekendFriSun = arrayOf(DayOfWeek.FRIDAY, DayOfWeek.SUNDAY)
+    val weekendFri = arrayOf(DayOfWeek.FRIDAY)
+    val weekendSat = arrayOf(DayOfWeek.SATURDAY)
+    val weekendSun = arrayOf(DayOfWeek.SUNDAY)
+    return when (locale.country) {
+        "CO" -> weekendSun // Colombia
+        "GQ" -> weekendSun // Equatorial Guinea
+        "IN" -> weekendSun // India
+        "MX" -> weekendSun // Mexico
+        "KP" -> weekendSun // North Korea
+        "UG" -> weekendSun // Uganda
+        "BN" -> weekendFriSun // Brunei Darussalam
+        "DJ" -> weekendFri // Djibouti
+        "IR" -> weekendFri // Iran
+        "AF" -> weekendThuFri // Afghanistan
+        "NP" -> weekendSat // Nepal
+        "DZ" -> weekendFriSat // Algeria
+        "BH" -> weekendFriSat // Bahrain
+        "BD" -> weekendFriSat // Bangladesh
+        "EG" -> weekendFriSat // Egypt
+        "IQ" -> weekendFriSat // Iraq
+        "IL" -> weekendFriSat // Israel
+        "JO" -> weekendFriSat // Jordan
+        "KW" -> weekendFriSat // Kuwait
+        "LY" -> weekendFriSat // Libya
+        "MV" -> weekendFriSat // Maldives
+        "MR" -> weekendFriSat // Mauritania
+        "MY" -> weekendFriSat // Malaysia
+        "OM" -> weekendFriSat // Oman
+        "PS" -> weekendFriSat // Palestine
+        "QA" -> weekendFriSat // Qatar
+        "SA" -> weekendFriSat // Saudi Arabia
+        "SD" -> weekendFriSat // Sudan
+        "SY" -> weekendFriSat // Syria
+        "AE" -> weekendFriSat // United Arab Emirates
+        "UAE" -> weekendFriSat // United Arab Emirates new code
+        "YE" -> weekendFriSat // Yemen
+        else -> weekendSatSun
     }
 }
-
-fun serverDateToCalendar(date: String): Calendar? {
-    val d = parseDate(SERVER_DATE_FORMAT, date) ?: return null
-    val c = Calendar.getInstance()
-    c.time = d
-    return c
-}
-
-@SuppressLint("SimpleDateFormat")
-fun parseDate(pattern: String, date: String): Date? {
-    return try {
-        SimpleDateFormat(pattern).parse(date)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return null
+fun LocalDate.toFirstMondayDate(): LocalDate {
+    if (dayOfWeek == DayOfWeek.MONDAY) {
+        return this
     }
+    var target = this
+    while (target.dayOfWeek != DayOfWeek.MONDAY) {
+        target = target.plusDays(1)
+    }
+    return target
 }
-
-fun nowMillis() = System.currentTimeMillis()
-
-fun tomorrow() = Calendar.getInstance().apply {
-    timeInMillis = System.currentTimeMillis()
-    add(Calendar.DATE, 1)
-    time
+fun Range<LocalDate>.getWeekendsDaysCount(): Long {
+    var weekendDaysCount = 0L
+    var date = lower
+    val end = upper.plusDays(1)
+    while (date != end) {
+        if (date.isWeekendDay()) {
+            weekendDaysCount++
+        }
+        date = date.plusDays(1)
+    }
+    return weekendDaysCount
 }
-
-fun todayStartMillis() = Calendar.getInstance().apply {
-    timeInMillis = System.currentTimeMillis()
-    timeInMillis
-    set(Calendar.HOUR_OF_DAY, 0)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 0)
-    set(Calendar.MILLISECOND, 0)
-}.timeInMillis
-
-fun todayEndMillis() = Calendar.getInstance().apply {
-    timeInMillis = System.currentTimeMillis()
-    set(Calendar.HOUR_OF_DAY, 23)
-    set(Calendar.MINUTE, 59)
-    set(Calendar.SECOND, 59)
-    set(Calendar.MILLISECOND, 999)
-}.timeInMillis
-
-fun tomorrowStartMillis() = tomorrow().apply {
-    set(Calendar.HOUR_OF_DAY, 0)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 0)
-    set(Calendar.MILLISECOND, 0)
-}.timeInMillis
-
-fun tomorrowEndMillis() = tomorrow().apply {
-    set(Calendar.HOUR_OF_DAY, 23)
-    set(Calendar.MINUTE, 59)
-    set(Calendar.SECOND, 59)
-    set(Calendar.MILLISECOND, 999)
-}.timeInMillis
-
-fun firstDayCurrentWeek(): Calendar {
-    val calendar = Calendar.getInstance()
-    val i = calendar[Calendar.DAY_OF_WEEK] - calendar.firstDayOfWeek
-    calendar.add(Calendar.DATE, -i)
-    return calendar
+fun LocalDate.isFirstWeekDay(): Boolean {
+    val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+    return dayOfWeek == firstDayOfWeek
 }
-
-fun lastDayCurrentWeek(): Calendar {
-    val calendar = firstDayCurrentWeek()
-    calendar.add(Calendar.DATE, 6)
-    return calendar
-}
-
-fun firstDayLastWeek(): Calendar {
-    val calendar = Calendar.getInstance()
-    val i = calendar[Calendar.DAY_OF_WEEK] - calendar.firstDayOfWeek
-    calendar.add(Calendar.DATE, -i - 7)
-    return calendar
-}
-
-fun lastDayLastWeek(): Calendar {
-    val calendar = firstDayLastWeek()
-    calendar.add(Calendar.DATE, 6)
-    return calendar
-}
-
-fun now(): Calendar = Calendar.getInstance()
-
-@SuppressLint("SimpleDateFormat", "DefaultLocale")
-fun Calendar.inDisplayFormat(): String  =
-    if (get(Calendar.DAY_OF_YEAR) != now().get(Calendar.DAY_OF_YEAR)) {
-        SimpleDateFormat(DISPLAY_DATE_FORMAT).format(this.time).capitalize()
+fun LocalDate.isLastWeekDay(): Boolean {
+    val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+    return if (firstDayOfWeek == DayOfWeek.MONDAY) {
+        dayOfWeek == DayOfWeek.SUNDAY
     } else {
-        NOW_CAPS + SimpleDateFormat(DISPLAY_TADAY_DATE_FORMAT).format(this.time)
+        dayOfWeek == DayOfWeek.SATURDAY
     }
-
-@SuppressLint("SimpleDateFormat")
-fun Calendar.inShortDisplayFormat(): String  =
-    if (get(Calendar.DAY_OF_YEAR) != now().get(Calendar.DAY_OF_YEAR)) {
-        SimpleDateFormat(DISPLAY_TADAY_SHORT_DATE_FORMAT).format(this.time)
+}
+fun LocalDate.isFirstWeekWorkingDay(): Boolean {
+    val lastWeekendDay = weekendDaysByLocale().lastOrNull() ?: return false
+    val dayIndex = when (lastWeekendDay) {
+        DayOfWeek.SUNDAY -> DayOfWeek.MONDAY.value
+        else -> lastWeekendDay.value + 1
+    }
+    return dayOfWeek == DayOfWeek.of(dayIndex)
+}
+fun LocalDate.isLastWeekWorkingDay(): Boolean {
+    val firstWeekendDay = weekendDaysByLocale().firstOrNull() ?: return false
+    return dayOfWeek == DayOfWeek.of(firstWeekendDay.value - 1)
+}
+fun String.toLocalDateTime(pattern: String = DATE_TIME_FORMAT_ISO_8601): LocalDateTime {
+    return LocalDateTime.parse(this, DateTimeFormatter.ofPattern(pattern))
+}
+fun buildDateRangeWithoutWeekends(range: Range<LocalDate>): Range<LocalDate> {
+    val weekendDays = range.getWeekendsDaysCount()
+    var newRange = Range(range.lower, range.upper.plusDays(weekendDays))
+    val newWeekendDays = newRange.getWeekendsDaysCount()
+    if (weekendDays != newWeekendDays) {
+        newRange = buildDateRangeWithoutWeekends(range, newWeekendDays)
+    }
+    return newRange
+}
+private fun buildDateRangeWithoutWeekends(
+    range: Range<LocalDate>,
+    weekendDays: Long
+): Range<LocalDate> {
+    var newRange = Range(range.lower, range.upper.plusDays(weekendDays))
+    val newWeekendDays = newRange.getWeekendsDaysCount()
+    if (weekendDays != newWeekendDays) {
+        newRange = Range(newRange.lower, newRange.upper.plusDays(newWeekendDays - weekendDays))
+    }
+    return newRange
+}
+fun LocalDateTime.formatToDeviceTimeFormat(context: Context): String {
+    return if (DateFormat.is24HourFormat(context)) {
+        format("H:mm")
     } else {
-        NOW
+        format("h:mm a")
     }
-
+}

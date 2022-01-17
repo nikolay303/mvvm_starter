@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="now">Сегодня</string>
+    <string name="now">Today</string>
+    <string name="label_loading">Loading…</string>
+
+    <string name="error_cannot_be_blank">Cannot be blank</string>
+    <string name="error_enter_first_name">Please enter your First name</string>
+    <string name="format_error_name_length">Up to %d characters</string>
+    <string name="error_enter_last_name">Please enter your Last name</string>
+    <string name="error_phone_must_be_10_digits">Must be a 10-digit number</string>
+    <string name="error_ssn_must_be_9_digits">Must be a 9-digit number</string>
+    <string name="error_empty_phone_number">Please enter your mobile number</string>
+    <string name="error_empty_email">Please enter your email</string>
+    <string name="error_invalid_email">Please check for mistypos</string>
+    <string name="format_error_password_length">Up to %d characters</string>
+    <string name="format_error_password_min_length">Password must be at least %d characters</string>
+    <string name="error_dob_you_must_be_least_18_to_continue">Please check for mistypos. You must be at least 18 to continue</string>
+    <string name="label_send_file">Send file</string>
+
 </resources>

@@ -7,10 +7,6 @@ import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
 
-/**
- * Created by Nikolay Siliuk on 9/3/20.
- */
-
 @HiltAndroidApp
 class App : Application() {
     companion object {

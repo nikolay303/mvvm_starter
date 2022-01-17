@@ -1,18 +1,17 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
 
 android {
-    compileSdkVersion(Versions.compileSdk)
-    buildToolsVersion(Versions.buildTools)
+    compileSdk = Versions.compileSdk
+    buildToolsVersion = Versions.buildTools
 
     defaultConfig {
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.compileSdk)
+        minSdk = Versions.minSdk
+        targetSdk = Versions.compileSdk
         applicationId = "com.android.PACKAGE"
         versionCode = 1
         versionName = "0.0.1"
@@ -26,6 +25,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
 //    signingConfigs {
@@ -46,7 +49,7 @@ android {
 
     buildTypes {
         maybeCreate("debug").apply {
-            signingConfig = null
+//            signingConfig = null
         }
 
         maybeCreate("release").apply {
@@ -54,16 +57,16 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
-    flavorDimensions("default")
+    flavorDimensions += "default"
 
 
     productFlavors {
-        create("staging").apply {
-            dimension = "default"
-            applicationIdSuffix = ".staging"
+//        create("staging").apply {
+//            dimension = "default"
+//            applicationIdSuffix = ".staging"
 //            signingConfig = signingConfigs["staging"]
-            versionNameSuffix = ".staging"
-        }
+//            versionNameSuffix = ".staging"
+//        }
 //        create("release").apply {
 //            dimension = "default"
 //            signingConfig = signingConfigs["release"]
@@ -76,9 +79,6 @@ repositories {
 }
 dependencies {
     implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libs")))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.21")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-
     testImplementation(Deps.Test.junit)
     testImplementation(Deps.Test.mockito)
     testImplementation(Deps.Test.robolectric)
@@ -101,7 +101,6 @@ dependencies {
     implementation(Deps.Network.okHttp)
     implementation(Deps.Network.loggingInterceptor)
     implementation(Deps.Common.timber)
-    implementation(Deps.Common.ankoCommons)
     implementation(Deps.Common.preferences)
     implementation(Deps.Common.crashlytics) {
         isTransitive = true
@@ -121,10 +120,7 @@ dependencies {
     implementation(Deps.Database.roomCompiler)
     implementation(Deps.Database.roomKtx)
 
-    implementation("io.coil-kt:coil:1.1.1")
-
     implementation(project(":common"))
-    implementation(project(":core"))
 }
 kapt {
     generateStubs = true

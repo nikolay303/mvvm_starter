@@ -16,10 +16,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
-/**
- * Created by Nikolay Siliuk on 1/31/21.
- */
-
 @Singleton
 class RestApiClient @Inject constructor(
     private val preferences: Preferences,
