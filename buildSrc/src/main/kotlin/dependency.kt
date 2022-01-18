@@ -24,7 +24,7 @@ object Versions {
     const val safeArgs = "2.3.5"
     const val navigation = "2.4.0-rc01"
     const val annotations = "1.3.0"
-    const val room = "2.3.0"
+    const val room = "2.4.1"
     const val desugarJdkLibs = "1.1.5"
     const val viewBinding = "1.5.2"
 }

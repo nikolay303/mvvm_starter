@@ -117,8 +117,8 @@ dependencies {
     implementation(Deps.Common.activityKtx)
     implementation(Deps.Common.fragmentKtx)
     implementation(Deps.Database.room)
-    implementation(Deps.Database.roomCompiler)
-    implementation(Deps.Database.roomKtx)
+    annotationProcessor(Deps.Database.roomCompiler)
+    kapt(Deps.Database.roomKtx)
 
     implementation(project(":common"))
 }
